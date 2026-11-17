@@ -91,7 +91,7 @@
               color-mix(in srgb, var(--brand) 80%, transparent),
               color-mix(in srgb, var(--brand) 80%, transparent)
             ),
-            url("../images/produce.png")
+            url("../images/produce.png");
           background-color: var(--brand);
         }
       }
