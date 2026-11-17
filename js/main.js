@@ -7,6 +7,9 @@
         "Pigs",
         "Rabbits",
         "Dairy",
+        "Herbal Plants",
+        "Seeds",
+        "Others",
       ];
       var DISTS = [ 
             "Buikwe","Bukomansimbi","Butambala","Buvuma","Gomba","Kalangala",
