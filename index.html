@@ -1,0 +1,417 @@
+<!-- Copyright Patrick Kweyu, Emmanuel Ojuka Boya 2026. All rights reserved -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Soko Yaffe – Kalagi Central Market Portal</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <!--<script src="../Source Code/Chart.min.js"></script> -->
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <div class="top">
+          <!-- <span class="logo">Soko Yaffe</span> -->
+          <img
+            class="logo"
+            src="images/community-logo.png"
+            alt="Soko Yaffe logo"
+          />
+          <span id="who"
+            ><button class="btn" id="whoBtn" type="button">Log in</button></span
+          >
+        </div>
+        <div class="hero">
+          <h1>Sell your harvest at a fair price.</h1>
+          <p>
+            Post what you have, see today’s prices, and call buyers directly. No
+            middlemen taking a cut.
+          </p>
+          <div class="search">
+            <input
+              id="q"
+              type="search"
+              placeholder="Search matooke, eggs, goats…"
+              aria-label="Search products"
+            />
+            <button class="btn" id="go" type="button">Find produce</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav role="tablist" aria-label="Portal sections">
+      <div class="wrap" style="display: flex; gap: 4px; padding: 0 8px">
+        <button
+          role="tab"
+          id="t-buy"
+          aria-selected="true"
+          aria-controls="p-buy"
+        >
+          Buy produce
+        </button>
+        <button
+          role="tab"
+          id="t-sell"
+          aria-selected="false"
+          aria-controls="p-sell"
+        >
+          Sell produce
+        </button>
+        <button
+          role="tab"
+          id="t-prices"
+          aria-selected="false"
+          aria-controls="p-prices"
+        >
+          Price board
+        </button>
+        <button
+          role="tab"
+          id="t-help"
+          aria-selected="false"
+          aria-controls="p-help"
+        >
+          How it works
+        </button>
+        <button
+          role="tab"
+          id="t-dash"
+          aria-selected="false"
+          aria-controls="p-dash"
+        >
+          Dashboard
+        </button>
+        <button
+          role="tab"
+          id="t-acct"
+          aria-selected="false"
+          aria-controls="p-acct"
+        >
+          Account
+        </button>
+      </div>
+    </nav>
+
+    <main class="wrap">
+      <p>&nbsp;</p>
+      <!-- <p class="note">
+        These are sample listings to show how the portal works. Replace them
+        with real farmers’ posts when you launch.
+      </p> -->
+
+      <section id="p-buy" role="tabpanel" aria-labelledby="t-buy">
+        <div class="filters">
+          <select id="fcat" aria-label="Category">
+            <option value="">All categories</option>
+          </select>
+          <select id="fdist" aria-label="District">
+            <option value="">All districts</option>
+          </select>
+          <select id="fsort" aria-label="Sort">
+            <option value="new">Newest first</option>
+            <option value="low">Price: low to high</option>
+            <option value="high">Price: high to low</option>
+          </select>
+        </div>
+        <div id="chip" hidden></div>
+        <p class="meta" id="count" aria-live="polite"></p>
+        <div class="grid" id="list"></div>
+      </section>
+
+      <section id="p-sell" role="tabpanel" aria-labelledby="t-sell" hidden>
+        <h2 style="margin-bottom: 12px">Post what you want to sell</h2>
+        <p class="meta" id="sellAs"></p>
+        <div class="empty" id="sellGate">
+          <p id="gateMsg" style="margin: 0 0 12px"></p>
+          <button class="btn alt" type="button" data-login="1">
+            Log in or register
+          </button>
+        </div>
+        <form id="sellForm">
+          <div class="row">
+            <label
+              >Product<input
+                name="item"
+                required
+                placeholder="e.g. Eggs, Goat, Beans"
+            /></label>
+            <label>Category<select name="cat" required></select></label>
+          </div>
+          <div class="row">
+            <label
+              >Quantity<input name="qty" required placeholder="e.g. 20 trays"
+            /></label>
+            <label
+              >Price (UGX) per unit<input
+                name="price"
+                type="number"
+                min="0"
+                required
+                inputmode="numeric"
+            /></label>
+          </div>
+          <label
+            >Details (optional)<textarea
+              name="note"
+              rows="3"
+              placeholder="Breed, quality, pick-up place, delivery"
+            ></textarea>
+          </label>
+          <button class="btn" type="submit">Post listing</button>
+        </form>
+      </section>
+
+      <section id="p-prices" role="tabpanel" aria-labelledby="t-prices" hidden>
+        <h2 style="margin-bottom: 4px">Price board</h2>
+        <p class="meta" style="margin: 0 0 12px">
+          Average prices in UGX across nearby markets, with the last six weeks.
+        </p>
+        <div class="scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Unit</th>
+                <th>Today</th>
+                <th>Week change</th>
+                <th>6-week trend</th>
+              </tr>
+            </thead>
+            <tbody id="board"></tbody>
+          </table>
+        </div>
+        <p class="meta">
+          Tip: if the trend is rising, hold stock a little longer. If it is
+          falling, sell sooner.
+        </p>
+      </section>
+
+      <section id="p-help" role="tabpanel" aria-labelledby="t-help" hidden>
+        <h2 style="margin-bottom: 12px">How it works</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Farmers</h3>
+            <p>
+              Post your produce with quantity, price, and your phone number.
+              Update or remove it when sold.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Buyers</h3>
+            <p>
+              Search by product or district, then call or message the farmer on
+              WhatsApp to agree on price and pick-up.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Payment</h3>
+            <p>
+              Pay by mobile money or cash on delivery. Meet in a public place
+              and check goods before paying.
+            </p>
+          </div>
+          <div class="card">
+            <h3>No smartphone?</h3>
+            <p>
+              Plan for an SMS or USSD option and a community agent at the ICT
+              centre who posts listings for farmers.
+            </p>
+          </div>
+        </div>
+      </section>
+      <section id="p-dash" role="tabpanel" aria-labelledby="t-dash" hidden>
+        <div class="empty" id="dashGate">
+          <p style="margin: 0 0 12px">Log in to see your dashboard.</p>
+          <button class="btn alt" type="button" data-login="1">
+            Log in or register
+          </button>
+        </div>
+        <div id="dashBody" hidden>
+          <h2 id="dashHi" style="margin-bottom: 12px"></h2>
+          <div class="kpis" id="kpis"></div>
+          <div class="dash2">
+            <div class="card">
+              <h3>Listings by category</h3>
+              <div class="bars" id="bCat"></div>
+            </div>
+            <div class="card">
+              <h3>Listings by district</h3>
+              <div class="bars" id="bDist"></div>
+            </div>
+          </div>
+          <div id="mineBox"></div>
+          <h3 style="margin: 16px 0 8px">All farmers and stalls</h3>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Stall</th>
+                  <th>Farmer</th>
+                  <th>District</th>
+                  <th>Listings</th>
+                  <th>Produce</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="fRows"></tbody>
+            </table>
+          </div>
+          <h3 style="margin: 16px 0 8px">Price comparison by product</h3>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Sellers</th>
+                  <th>Lowest</th>
+                  <th>Average</th>
+                  <th>Highest</th>
+                  <th>Cheapest stall</th>
+                  <th>Market today</th>
+                </tr>
+              </thead>
+              <tbody id="cRows"></tbody>
+            </table>
+          </div>
+          <p class="meta">
+            Compares what farmers are asking. Check units (kg, crate, tray)
+            before comparing.
+          </p>
+          <h3 style="margin: 16px 0 8px">Available produce</h3>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Stall</th>
+                  <th>District</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="aRows"></tbody>
+            </table>
+          </div>
+          <h3 style="margin: 16px 0 8px">Market movers this week</h3>
+          <div class="scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Today</th>
+                  <th>Change</th>
+                </tr>
+              </thead>
+              <tbody id="movers"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+      <section id="p-acct" role="tabpanel" aria-labelledby="t-acct" hidden>
+        <p class="note">
+          <!-- Demo accounts are saved only in this browser. For a real launch,
+          connect a back end (such as Firebase or Supabase) so accounts work on
+          any device and passwords are stored securely. -->
+        </p>
+        <div id="acctOut">
+          <div class="acct">
+            <form id="loginForm">
+              <h2>Log in</h2>
+              <label
+                >Email<input
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+              /></label>
+              <label
+                >Password<input
+                  name="password"
+                  type="password"
+                  required
+                  autocomplete="current-password"
+              /></label>
+              <button class="btn" type="submit">Log in</button>
+            </form>
+            <form id="regForm">
+              <h2>Create an account</h2>
+              <label
+                >I am a<select name="role" id="rrole">
+                  <option value="buyer">Buyer</option>
+                  <option value="farmer">Farmer (open a virtual stall)</option>
+                </select></label
+              >
+              <label
+                >Your name<input name="name" required autocomplete="name"
+              /></label>
+              <label
+                >Email<input
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+              /></label>
+              <label
+                >Password (6+ characters)<input
+                  name="password"
+                  type="password"
+                  minlength="6"
+                  required
+                  autocomplete="new-password"
+              /></label>
+              <div id="stallFields" hidden style="display: grid; gap: 12px">
+                <label
+                  >Stall name<input
+                    name="stall"
+                    id="sname"
+                    placeholder="e.g. Grace's Fresh Farm"
+                /></label>
+                <label>District<select name="rdist" id="rdist"></select></label>
+                <label
+                  >Phone / WhatsApp<input
+                    name="rphone"
+                    id="rphone"
+                    type="tel"
+                    inputmode="tel"
+                    placeholder="07XX XXX XXX"
+                /></label>
+                <label
+                  >About your stall (optional)<textarea
+                    name="about"
+                    rows="2"
+                    placeholder="What you grow, delivery, pick-up"
+                  ></textarea>
+                </label>
+              </div>
+              <button class="btn alt" type="submit">Register</button>
+            </form>
+          </div>
+        </div>
+        <div id="acctIn" hidden>
+          <h2 id="acctHi" style="margin-bottom: 12px"></h2>
+          <div class="grid" id="stallBox"></div>
+          <p>
+            <button class="btn line" id="logout" type="button">Log out</button>
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        &copy; [Soko Yaffe] is a local community website. Always confirm quality
+        and price before you pay. Authored by Ojuka Emmanueal Boya and Kweyu
+        Patrick
+      </div>
+    </footer>
+    <div id="toast" hidden role="status"></div>
+    <script src="js/main.js" type="module"></script>
+  </body>
+</html>
